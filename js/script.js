@@ -24,7 +24,7 @@ function shuffleOrder() {
 }
 
 function lightColor(element, number) {
-    time = time * 500
+    number = number * 500
     setTimeout(() => {
         element.classList.add('selected')
     }, number - 250)
@@ -32,3 +32,65 @@ function lightColor(element, number) {
         element.classList.remove('selected')
     })
 }
+
+function checkOrder() {
+    for(let i in clickedOrder) {
+        if(clickedOrder[i] != order[i]) {
+            gameOver()
+            break
+        }
+    }
+    if(clickedOrder.length == order.length) {
+        alert(`Pontuação: ${score}\nVocê acertou! Iniciando próximo nível`)
+        nextLevel()
+    }
+}
+
+function click(color) {
+    clickedOrder[clickedOrder.length] = color
+    createColorElement(color).classList.add('selected')
+
+    setTimeout(() => {
+        createColorElement(color).classList.remove('selected')
+        checkOrder()
+    }, 250)    
+}
+
+function createColorElement(color) {
+    if(color == 0) {
+        return green
+    } else if(color == 1) {
+        return red
+    } else if(color == 2) {
+        return yellow
+    } else if(color == 3) {
+        return blue
+    }
+}
+
+function nextLevel() {
+    score++
+    shuffleOrder()
+}
+
+function gameOver() {
+    alert(`Pontuação: ${score}!\nVocê perdeu o jogo!\nClique aqui para iniciar um novo jogo`)
+    order = []
+    clickedOrder = []
+
+    playGame()
+}
+
+function playGame() {
+    alert('Bem vindo ao Genesis! Iniciando novo jogo! ')
+    score = 0
+
+    nextLevel()
+}
+
+green.onclick = () => click(0)
+red.onclick = () => click(1)
+yellow.onclick = () => click(2)
+blue.onclick = () => click(3)
+
+playGame()
